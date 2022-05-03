@@ -1,5 +1,6 @@
-# TenThousandHoursBot
-Телеграмм бот считающий часы навыков
-Ссылка на бота: https://t.me/TenThousandHours_bot
-Ссылка на структуру бота: https://www.figma.com/file/vxzf1qy8FwTDEBBpmAo1jG
-Ссылка на автора: https://t.me/SanyaGTR
+# Ten Thousand Hours Bot
+**Телеграмм бот считающий часы навыков.**
+
+*Бот «[10 000 часов](https://t.me/TenThousandHours_bot)» в Телеграмме.*  
+[*Структура бота*](https://www.figma.com/file/vxzf1qy8FwTDEBBpmAo1jG).  
+*Связь с [разработчиком](https://t.me/SanyaGTR).*
