@@ -1,10 +1,10 @@
-from datetime import time
+from datetime import datetime, time
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Command, Text
 
 from loader import DISP
-from utils.misc import prettify_hours
+from utils.misc import prettify_hours, manage_notification
 from utils.db_api import Skills, TTHours_User
 from keyboards.default import MAIN_KEYBOARD_MENU
 from states import AddTimeToSkill, AddNewSkill, EnterNotificationTime
@@ -169,7 +169,7 @@ async def choose_notification_time(call: types.CallbackQuery):
     )
     await call.message.answer(
         "Остался последний шаг\n\n"
-        "Каждый день вечером бот будет спрашивать "
+        "Каждый день бот будет спрашивать "
         "сколько времени вы уделили какому-то новыку\n\n"
         "Выберите время когда будет приходить напоминание или введите своё. "
         "Позже вы сможете его изменить",
@@ -185,8 +185,10 @@ async def save_selected_notification_time(
     notification_time = callback_data.get('notification_time', '22:00')
     notification_time = time.fromisoformat(notification_time)
     TTHours_User(call.from_user).update_notification_time(notification_time)
+    await manage_notification(call.from_user.id)
     await call.message.answer(
-        "Отлично. Первое сообщение придёт уже завтра "
+        "Отлично. Первое сообщение придёт уже "
+        f"{('сегодня', 'завтра')[datetime.now().time() > notification_time]} "
         f"в <b>{notification_time.isoformat('minutes')}</b>.\n\nУдачи",
         reply_markup=MAIN_KEYBOARD_MENU)
 
@@ -198,6 +200,7 @@ async def change_notification_state(
     await call.answer(cache_time=60)
     is_turn_on = callback_data.get("is_turn_on") == "False"
     TTHours_User(call.from_user).manage_notification(is_turn_on)
+    await manage_notification(call.from_user.id, is_turn_on)
     await call.message.answer(
         "Напоминание " + ("отключено", "включено")[is_turn_on],
         reply_markup=MAIN_KEYBOARD_MENU

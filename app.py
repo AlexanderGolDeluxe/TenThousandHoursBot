@@ -1,8 +1,9 @@
 from aiogram import executor, Dispatcher
 
+from db import db
 from loader import DISP
 import middlewares, filters, handlers
-from utils.misc import create_notification_task
+from utils.misc import create_notification_tasks
 from utils.notify_admins import on_startup_notify, on_shutdown_notify
 from utils.set_bot_commands import set_default_commands
 
@@ -15,10 +16,11 @@ async def on_startup(dispatcher: Dispatcher):
     await on_startup_notify(dispatcher)
     
     # Создание задачи оповещения
-    create_notification_task([])
+    await create_notification_tasks()
 
 
 async def on_shutdown(dispatcher: Dispatcher):
+    db.conn.close()
     await on_shutdown_notify(dispatcher)
 
 

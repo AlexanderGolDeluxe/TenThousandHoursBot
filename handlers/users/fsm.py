@@ -3,7 +3,7 @@ from aiogram.dispatcher import FSMContext
 
 from loader import DISP
 from data.config import ADMIN_LINK
-from utils.misc import prettify_hours
+from utils.misc import prettify_hours, manage_notification
 from utils.db_api import Skills, TTHours_User
 from states import AddNewSkill, AddTimeToSkill, EnterNotificationTime
 from keyboards.default import MAIN_KEYBOARD_MENU
@@ -83,7 +83,7 @@ async def set_time_for_new_skill(message: types.Message, state: FSMContext):
             "Отлично! Навык добавлен. Хочешь добавить ещё один?",
             reply_markup=add_another_skill_buttons
         )
-        await state.finish()
+        await state.reset_state(not state_data.get("first_launch"))
 
 
 @DISP.message_handler(state=AddTimeToSkill.wait_input_skill_time)
@@ -113,11 +113,11 @@ async def set_time_for_skill(message: types.Message, state: FSMContext):
 
 @DISP.message_handler(state=EnterNotificationTime.input_custom_time)
 async def save_entered_notification_time(
-    message: types.Message, state: FSMContext):
-    """"""
+        message: types.Message, state: FSMContext):
     valid_time = await parse_time(message.text)
     if valid_time:
         TTHours_User(message.from_user).update_notification_time(valid_time)
+        await manage_notification(message.from_id)
         await message.answer(
             "Новое время установленно!",
             reply_markup=MAIN_KEYBOARD_MENU

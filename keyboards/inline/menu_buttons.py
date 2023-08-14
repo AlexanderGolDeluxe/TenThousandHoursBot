@@ -71,7 +71,7 @@ async def create_notification_time_keyboard(
             text="Ввести своё время",
             callback_data="enter custom time")],
         [InlineKeyboardButton(
-            text=("Включить", "Выключить")[is_notification_on] + " напоминание",
+            text=("В", "Вы")[is_notification_on] + "ключить напоминание",
             callback_data=MANAGE_NOTIFICATION_CALLBACK.new(
                 is_turn_on=is_notification_on))]
     ))
