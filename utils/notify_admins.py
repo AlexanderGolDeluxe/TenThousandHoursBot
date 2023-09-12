@@ -15,4 +15,4 @@ async def on_startup_notify(dp: Dispatcher):
 
 
 async def on_shutdown_notify(dp: Dispatcher):
-    dp.bot.close()
+    await dp.bot.close()
