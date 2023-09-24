@@ -3,6 +3,7 @@ from datetime import datetime
 
 from db import db
 from loader import DISP
+from data.config import datetime_now
 from utils.db_api import Skills
 from keyboards.inline import create_skills_keyboard
 
@@ -13,7 +14,7 @@ def count_notification_delay(string_notification_time: str):
     """Высчитывает задержку до отправки сообщения в секундах"""
     notification_delay = (
         datetime.strptime(string_notification_time, "%H:%M:%S") -
-        datetime.now()
+        datetime_now().replace(tzinfo=None)
     )
     return notification_delay.seconds
 
@@ -24,7 +25,7 @@ async def send_notification(user_id: int, send_time_string: str):
     skills_inline_keyboard = (
         await create_skills_keyboard(all_skills, "add hours")
     )
-    while not asyncio.current_task().cancelling():
+    while not asyncio.current_task().cancelled():
         timedelta_to_sleep = count_notification_delay(send_time_string)
         if timedelta_to_sleep > 0:
             await asyncio.sleep(timedelta_to_sleep + 1)

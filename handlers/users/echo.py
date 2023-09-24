@@ -1,9 +1,10 @@
-from datetime import datetime, time
+from datetime import time
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Command, Text
 
 from loader import DISP
+from data.config import datetime_now
 from utils.misc import prettify_hours, manage_notification
 from utils.db_api import Skills, TTHours_User
 from keyboards.default import MAIN_KEYBOARD_MENU
@@ -188,7 +189,7 @@ async def save_selected_notification_time(
     await manage_notification(call.from_user.id)
     await call.message.answer(
         "Отлично. Первое сообщение придёт уже "
-        f"{('сегодня', 'завтра')[datetime.now().time() > notification_time]} "
+        f"{('сегодня', 'завтра')[datetime_now().time() > notification_time]} "
         f"в <b>{notification_time.isoformat('minutes')}</b>.\n\nУдачи",
         reply_markup=MAIN_KEYBOARD_MENU)
 

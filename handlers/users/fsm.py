@@ -119,7 +119,7 @@ async def save_entered_notification_time(
         TTHours_User(message.from_user).update_notification_time(valid_time)
         await manage_notification(message.from_id)
         await message.answer(
-            "Новое время установленно!",
+            "Новое время установлено!",
             reply_markup=MAIN_KEYBOARD_MENU
         )
         await state.finish()
