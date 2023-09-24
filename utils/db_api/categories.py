@@ -116,7 +116,9 @@ class TTHours_User(User):
         self.can_join_groups = user_object.can_join_groups
         self.supports_inline_queries = user_object.supports_inline_queries
         self.can_read_all_group_messages = (
-            user_object.can_read_all_group_messages)
+            user_object.can_read_all_group_messages
+        )
+        self.check_user_in_db()
     
     def check_user_in_db(self) -> None:
         """Проверяет есть ли пользователь в БД,

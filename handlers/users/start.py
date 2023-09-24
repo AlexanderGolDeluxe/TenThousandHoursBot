@@ -19,4 +19,4 @@ async def bot_start(message: types.Message, state: FSMContext):
     )
     await add_skill_command(message)
     await state.update_data(first_launch=True)
-    TTHours_User(message.from_user).check_user_in_db()
+    TTHours_User(message.from_user)
